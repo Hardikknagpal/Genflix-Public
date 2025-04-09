@@ -1,65 +1,131 @@
-// import React from 'react';
-// import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-// import { MovieCard } from '../components/MovieCard';
-// import { useAppContext } from '../context/AppContext';
-// import { getTrending, getPopular, MediaItem } from '../services/tmdbApi';
-// import { CustomText } from '../components/CustomText';
+// import React, { useEffect, useState } from 'react';
+// import { View, StyleSheet, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
 // import { useRouter } from 'expo-router';
+// import { CustomText } from '../components/CustomText';
+// import { MovieCard } from '../components/MovieCard';
+// import { FeaturedMovie } from '../components/FeaturedMovie';
+// import { getTrending, getPopular, MediaItem } from '../services/tmdbApi';
+// import { useAppContext } from '../context/AppContext';
 
 // export default function HomeScreen() {
-//   const [trending, setTrending] = React.useState<MediaItem[]>([]);
-//   const [popular, setPopular] = React.useState<MediaItem[]>([]);
-//   const { isAuthenticated } = useAppContext();
 //   const router = useRouter();
+//   const { isLoading, setIsLoading } = useAppContext();
+//   const [refreshing, setRefreshing] = useState(false);
+//   const [trending, setTrending] = useState<MediaItem[]>([]);
+//   const [popular, setPopular] = useState<MediaItem[]>([]);
+//   const [featured, setFeatured] = useState<MediaItem | null>(null);
 
-//   React.useEffect(() => {
-//     const loadData = async () => {
-//       try {
-//         const trendingData = await getTrending();
-//         setTrending(trendingData);
-        
-//         const popularData = await getPopular();
-//         setPopular(popularData);
-//       } catch (error) {
-//         console.error('Error loading data:', error);
+//   const fetchData = async () => {
+//     try {
+//       setIsLoading(true);
+//       const [trendingData, popularData] = await Promise.all([
+//         getTrending('movie'),
+//         getPopular('movie'),
+//       ]);
+      
+//       setTrending(trendingData);
+//       setPopular(popularData);
+      
+//       // Set the first trending movie as featured
+//       if (trendingData.length > 0) {
+//         setFeatured(trendingData[0]);
 //       }
-//     };
-
-//     loadData();
-//   }, []);
-
-//   const handleMoviePress = (id: number) => {
-//     router.push(`/movie/${id}`);
+//     } catch (error) {
+//       console.error('Error fetching data:', error);
+//     } finally {
+//       setIsLoading(false);
+//     }
 //   };
 
+//   useEffect(() => {
+//     fetchData();
+//   }, []);
+
+//   const onRefresh = async () => {
+//     setRefreshing(true);
+//     await fetchData();
+//     setRefreshing(false);
+//   };
+
+//   const handleMoviePress = (item: MediaItem) => {
+//     router.push({
+//       pathname: '/movie/[id]',
+//       params: { id: item.id },
+//     });
+//   };
+
+//   if (isLoading && !refreshing) {
+//     return (
+//       <View style={styles.loadingContainer}>
+//         <ActivityIndicator size="large" color="#E50914" />
+//       </View>
+//     );
+//   }
+
 //   return (
-//     <ScrollView style={styles.container}>
-//       <View style={styles.section}>
-//         <CustomText variant="title" style={styles.sectionTitle}>
-//           Trending Now
-//         </CustomText>
-//         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-//           {trending.map((item) => (
-//             <TouchableOpacity key={item.id} onPress={() => handleMoviePress(item.id)}>
-//               <MovieCard item={item} />
-//             </TouchableOpacity>
-//           ))}
-//         </ScrollView>
-//       </View>
-      
-//       <View style={styles.section}>
-//         <CustomText variant="title" style={styles.sectionTitle}>
-//           Popular
-//         </CustomText>
-//         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-//           {popular.map((item) => (
-//             <TouchableOpacity key={item.id} onPress={() => handleMoviePress(item.id)}>
-//               <MovieCard item={item} />
-//             </TouchableOpacity>
-//           ))}
-//         </ScrollView>
-//       </View>
-//     </ScrollView>
+//     <View style={styles.container}>
+//       <FlatList
+//         data={[{ key: 'featured' }, { key: 'trending' }, { key: 'popular' }]}
+//         renderItem={({ item }) => {
+//           switch (item.key) {
+//             case 'featured':
+//               return featured ? (
+//                 <FeaturedMovie item={featured} />
+//               ) : null;
+//             case 'trending':
+//               return (
+//                 <View style={styles.section}>
+//                   <CustomText variant="title" style={styles.sectionTitle}>
+//                     Trending Now
+//                   </CustomText>
+//                   <FlatList
+//                     data={trending}
+//                     horizontal
+//                     showsHorizontalScrollIndicator={false}
+//                     renderItem={({ item }) => (
+//                       <MovieCard
+//                         item={item}
+//                         onPress={() => handleMoviePress(item)}
+//                       />
+//                     )}
+//                     keyExtractor={(item) => item.id.toString()}
+//                   />
+//                 </View>
+//               );
+//             case 'popular':
+//               return (
+//                 <View style={styles.section}>
+//                   <CustomText variant="title" style={styles.sectionTitle}>
+//                     Popular on GenFlix
+//                   </CustomText>
+//                   <FlatList
+//                     data={popular}
+//                     horizontal
+//                     showsHorizontalScrollIndicator={false}
+//                     renderItem={({ item }) => (
+//                       <MovieCard
+//                         item={item}
+//                         onPress={() => handleMoviePress(item)}
+//                       />
+//                     )}
+//                     keyExtractor={(item) => item.id.toString()}
+//                   />
+//                 </View>
+//               );
+//             default:
+//               return null;
+//           }
+//         }}
+//         keyExtractor={(item) => item.key}
+//         refreshControl={
+//           <RefreshControl
+//             refreshing={refreshing}
+//             onRefresh={onRefresh}
+//             tintColor="#FFFFFF"
+//           />
+//         }
+//       />
+//     </View>
 //   );
 // }
 
@@ -68,16 +134,21 @@
 //     flex: 1,
 //     backgroundColor: '#000000',
 //   },
+//   loadingContainer: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: '#000000',
+//   },
 //   section: {
 //     marginVertical: 16,
 //   },
 //   sectionTitle: {
-//     color: '#FFFFFF',
-//     fontSize: 20,
 //     marginLeft: 16,
 //     marginBottom: 8,
 //   },
 // }); 
+
 
 
 
@@ -244,9 +315,6 @@ export default function HomeScreen() {
             © 2023 GenFlix • All Rights Reserved
           </CustomText>
         </View>
-
-        {/* Add extra padding at the bottom to ensure content is visible above the tab bar */}
-        <View style={{ height: 100 }} />
       </Animated.ScrollView>
     </SafeAreaView>
   )
@@ -256,6 +324,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#000000",
+    // Add extra padding at the top to avoid notch issues
     paddingTop: Platform.OS === "ios" ? 10 : 20,
   },
   scrollContent: {

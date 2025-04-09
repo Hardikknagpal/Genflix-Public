@@ -1,45 +1,129 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+// import { Tabs } from 'expo-router';
+// import { Ionicons } from '@expo/vector-icons';
+// import { TouchableOpacity } from 'react-native';
+// import { useNavigation } from '@react-navigation/native';
+// import type { DrawerNavigationProp } from '@react-navigation/drawer';
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+// type RootStackParamList = {
+//   '(drawer)': undefined;
+//   'movie/[id]': { id: string };
+//   'login': undefined;
+// };
+
+// export default function TabsLayout() {
+//   const navigation = useNavigation<DrawerNavigationProp<RootStackParamList>>();
+
+//   return (
+//     <Tabs
+//       screenOptions={{
+//         headerStyle: {
+//           backgroundColor: '#1A1A1A',
+//         },
+//         headerTintColor: '#FFFFFF',
+//         tabBarStyle: {
+//           backgroundColor: '#1A1A1A',
+//         },
+//         tabBarActiveTintColor: '#E50914',
+//         tabBarInactiveTintColor: '#FFFFFF',
+//         headerLeft: () => (
+//           <TouchableOpacity
+//             onPress={() => navigation.openDrawer()}
+//             style={{ marginLeft: 16 }}
+//           >
+//             <Ionicons name="menu" size={24} color="#FFFFFF" />
+//           </TouchableOpacity>
+//         ),
+//       }}
+//     >
+//       <Tabs.Screen
+//         name="index"
+//         options={{
+//           title: 'Home',
+//           tabBarIcon: ({ color, size }) => (
+//             <Ionicons name="home" size={size} color={color} />
+//           ),
+//         }}
+//       />
+//       <Tabs.Screen
+//         name="search"
+//         options={{
+//           title: 'Search',
+//           tabBarIcon: ({ color, size }) => (
+//             <Ionicons name="search" size={size} color={color} />
+//           ),
+//         }}
+//       />
+//       <Tabs.Screen
+//         name="favorites"
+//         options={{
+//           title: 'My List',
+//           tabBarIcon: ({ color, size }) => (
+//             <Ionicons name="heart" size={size} color={color} />
+//           ),
+//         }}
+//       />
+//     </Tabs>
+//   );
+// } 
+
+
+
+
+import { Tabs } from "expo-router"
+import { Ionicons } from "@expo/vector-icons"
+import { useColorScheme } from "react-native"
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme()
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
+        tabBarActiveTintColor: "#E50914",
+        tabBarInactiveTintColor: "#888",
+        tabBarStyle: {
+          backgroundColor: "#121212",
+          borderTopColor: "#333",
+        },
+        headerShown: false, 
+        headerStyle: {
+          backgroundColor: "#121212",
+        },
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Home",
+          tabBarIcon: ({ color, size }) => <Ionicons name="home" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="search"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "Search",
+          tabBarIcon: ({ color, size }) => <Ionicons name="search" size={size} color={color} />,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="favorites"
+        options={{
+          title: "My List",
+          tabBarIcon: ({ color, size }) => <Ionicons name="bookmark" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color, size }) => <Ionicons name="person" size={size} color={color} />,
         }}
       />
     </Tabs>
-  );
+  )
 }
