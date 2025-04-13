@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import {
   View,
@@ -11,6 +9,7 @@ import {
   Dimensions,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native"
 import { CustomText } from "../components/CustomText"
 import { useAppContext } from "../context/AppContext"
@@ -55,6 +54,14 @@ export const LoginScreen = () => {
     router.back()
   }
 
+  const handleForgotPassword = () => {
+    Alert.alert("Reset Password", "Please contact your administrator to reset your password.", [{ text: "OK" }])
+  }
+
+  const handleSignUp = () => {
+    Alert.alert("Sign Up", "Please contact your administrator to create a new account.", [{ text: "OK" }])
+  }
+
   return (
     <ImageBackground
       source={{
@@ -90,7 +97,7 @@ export const LoginScreen = () => {
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.input}
-                placeholder="Email or phone number"
+                placeholder="Email or username"
                 placeholderTextColor="#888888"
                 value={email}
                 onChangeText={setEmail}
@@ -125,7 +132,7 @@ export const LoginScreen = () => {
               )}
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.forgotPassword}>
+            <TouchableOpacity style={styles.forgotPassword} onPress={handleForgotPassword}>
               <CustomText variant="caption" style={styles.forgotPasswordText}>
                 Forgot password?
               </CustomText>
@@ -135,7 +142,7 @@ export const LoginScreen = () => {
               <CustomText variant="caption" style={styles.signupText}>
                 New to GenFlix?
               </CustomText>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleSignUp}>
                 <CustomText variant="caption" style={styles.signupLink}>
                   Sign up now
                 </CustomText>

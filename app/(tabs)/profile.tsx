@@ -1,21 +1,96 @@
-"use client"
-import { View, StyleSheet, TouchableOpacity, ScrollView, Image } from "react-native"
+import { View, StyleSheet, TouchableOpacity, ScrollView, Image, Alert } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { CustomText } from "../components/CustomText"
 import { Ionicons } from "@expo/vector-icons"
 import { useAppContext } from "../context/AppContext"
 import { useRouter } from "expo-router"
+import { getCurrentSession, getCurrentUser } from "../services/auth-service"
+import { useState, useEffect } from "react"
 
 export default function ProfileScreen() {
   const { isAuthenticated, user, logout } = useAppContext()
   const router = useRouter()
+  const [tokens, setTokens] = useState<{ idToken?: string; accessToken?: string }>({})
+  const [userDetails, setUserDetails] = useState<{ username?: string; email?: string }>({})
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchTokens()
+      fetchUserDetails()
+    }
+  }, [isAuthenticated])
+
+  // Set user details from context when it changes
+  useEffect(() => {
+    if (user && (user.username || user.email)) {
+      console.log("Setting user details from context:", user)
+      setUserDetails(user)
+    }
+  }, [user])
+
+  const fetchUserDetails = async () => {
+    try {
+      const userResult = await getCurrentUser()
+      if (userResult.success && userResult.user) {
+        const details = {
+          username: userResult.user.username,
+          email: userResult.user.attributes?.email || userResult.user.username,
+        }
+        console.log("Fetched user details:", details)
+        setUserDetails(details)
+      }
+    } catch (error) {
+      console.error("Error fetching user details:", error)
+    }
+  }
+
+  const fetchTokens = async () => {
+    try {
+      const session = await getCurrentSession()
+      if (session.success) {
+        setTokens({
+          idToken: session.idToken,
+          accessToken: session.accessToken,
+        })
+      }
+    } catch (error) {
+      console.error("Error fetching tokens:", error)
+    }
+  }
 
   const handleLogin = () => {
     router.push("/login")
   }
 
   const handleLogout = async () => {
-    await logout()
+    Alert.alert("Sign Out", "Are you sure you want to sign out?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Sign Out",
+        style: "destructive",
+        onPress: async () => {
+          const result = await logout()
+          if (result.success) {
+            router.replace("/")
+          } else {
+            Alert.alert("Error", result.error || "Failed to sign out")
+          }
+        },
+      },
+    ])
+  }
+
+  const showTokenInfo = () => {
+    if (tokens.idToken) {
+      Alert.alert(
+        "Authentication Tokens",
+        `ID Token (first 20 chars): ${tokens.idToken.substring(0, 20)}...\n\nAccess Token (first 20 chars): ${tokens.accessToken?.substring(0, 20)}...`,
+        [{ text: "OK" }],
+      )
+    }
   }
 
   return (
@@ -31,7 +106,7 @@ export default function ProfileScreen() {
           <Image
             source={{
               uri: isAuthenticated
-                ? "https://ui-avatars.com/api/?name=" + encodeURIComponent(user.username || "User")
+                ? "https://ui-avatars.com/api/?name=" + encodeURIComponent(userDetails.username || "User")
                 : "https://ui-avatars.com/api/?name=Guest&background=E50914&color=fff",
             }}
             style={styles.avatar}
@@ -39,11 +114,11 @@ export default function ProfileScreen() {
 
           <View style={styles.profileInfo}>
             <CustomText variant="title" style={styles.userName}>
-              {isAuthenticated ? user.username || "User" : "Guest"}
+              {isAuthenticated ? userDetails.username || "User" : "Guest"}
             </CustomText>
 
             <CustomText variant="caption" style={styles.userEmail}>
-              {isAuthenticated ? user.email : "Not signed in"}
+              {isAuthenticated ? userDetails.email : "Not signed in"}
             </CustomText>
           </View>
         </View>
@@ -57,7 +132,7 @@ export default function ProfileScreen() {
                 <Ionicons name="chevron-forward" size={20} color="#666666" />
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.menuItem}>
+              <TouchableOpacity style={styles.menuItem} onPress={() => router.push("/favorites")}>
                 <Ionicons name="bookmark-outline" size={24} color="#FFFFFF" />
                 <CustomText style={styles.menuItemText}>My Watchlist</CustomText>
                 <Ionicons name="chevron-forward" size={20} color="#666666" />
@@ -66,6 +141,12 @@ export default function ProfileScreen() {
               <TouchableOpacity style={styles.menuItem}>
                 <Ionicons name="time-outline" size={24} color="#FFFFFF" />
                 <CustomText style={styles.menuItemText}>Watch History</CustomText>
+                <Ionicons name="chevron-forward" size={20} color="#666666" />
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.menuItem} onPress={showTokenInfo}>
+                <Ionicons name="key-outline" size={24} color="#FFFFFF" />
+                <CustomText style={styles.menuItemText}>Authentication Info</CustomText>
                 <Ionicons name="chevron-forward" size={20} color="#666666" />
               </TouchableOpacity>
 
@@ -214,4 +295,3 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
   },
 })
-

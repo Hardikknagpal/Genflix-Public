@@ -395,13 +395,15 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { View, StyleSheet, ScrollView, Image, TouchableOpacity, ActivityIndicator, Dimensions } from "react-native"
+import { View, StyleSheet, ScrollView, Image, TouchableOpacity, ActivityIndicator, Dimensions, StatusBar } from "react-native"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { CustomText } from "../components/CustomText"
 import { Ionicons } from "@expo/vector-icons"
 import { getDetails, getCredits, getVideos, type MediaItem } from "../services/tmdbApi"
 import { useAppContext } from "../context/AppContext"
 import { LinearGradient } from "expo-linear-gradient"
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
+
 
 interface CastMember {
   id: number
@@ -509,6 +511,19 @@ export default function MovieDetailsScreen() {
     : "Release date unknown"
 
   return (
+    <SafeAreaProvider>
+    <View style={styles.fullScreen}>
+      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
+      
+      {/* Background image */}
+      <Image
+        source={{ uri: backdropPath }}
+        style={styles.absoluteBackdrop}
+        resizeMode="cover"
+      />
+      
+      <SafeAreaView edges={['right', 'bottom', 'left']} style={styles.safeArea}>
+
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Image
@@ -630,12 +645,30 @@ export default function MovieDetailsScreen() {
         <View style={{ height: 100 }} />
       </View>
     </ScrollView>
+    </SafeAreaView>
+      </View>
+    </SafeAreaProvider>
   )
 }
 
 const { width } = Dimensions.get("window")
 
 const styles = StyleSheet.create({
+  fullScreen: {
+    flex: 1,
+  },
+  absoluteBackdrop: {
+    position: 'absolute',
+    top: 10,
+    left: 0,
+    right: 0,
+    height: 300,
+  },
+  safeArea: {
+    flex: 1,
+    
+    backgroundColor: 'transparent',
+  },
   container: {
     flex: 1,
     backgroundColor: "#000000",
@@ -648,6 +681,7 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 300,
+    marginTop:15,
     position: "relative",
   },
   backdrop: {

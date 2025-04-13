@@ -1,25 +1,34 @@
-"use client"
-
 import { useState } from "react"
-import { View, StyleSheet, FlatList, ActivityIndicator } from "react-native"
+import { View, StyleSheet, FlatList, ActivityIndicator, RefreshControl } from "react-native"
+import { useRouter } from "expo-router"
+import { CustomText } from "../components/CustomText"
 import { MovieCard } from "../components/MovieCard"
 import { useAppContext } from "../context/AppContext"
-import { CustomText } from "../components/CustomText"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from "@expo/vector-icons"
-import { useRouter } from "expo-router"
-
 
 export default function FavoritesScreen() {
-  const { favorites, isAuthenticated, isLoading, navigateToLogin } = useAppContext()
+  const { favorites, isAuthenticated, isLoading, navigateToLogin, refreshWatchlist } = useAppContext()
   const [refreshing, setRefreshing] = useState(false)
 
-  const router = useRouter();
+  const router = useRouter()
 
   const handleLogin = () => {
     router.push("/login")
   }
-  
+
+  const handleRefresh = async () => {
+    setRefreshing(true)
+    try {
+      console.log("Refreshing watchlist...")
+      await refreshWatchlist()
+    } catch (error) {
+      console.error("Error refreshing watchlist:", error)
+    } finally {
+      setRefreshing(false)
+    }
+  }
+
   if (!isAuthenticated) {
     return (
       <SafeAreaView style={styles.container} edges={["top", "right", "left"]}>
@@ -78,13 +87,10 @@ export default function FavoritesScreen() {
       <FlatList
         data={favorites}
         renderItem={({ item }) => <MovieCard item={item} />}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => (item.watchlistId ? item.watchlistId : `movie-${item.id}`)}
         numColumns={2}
         contentContainerStyle={styles.list}
-        refreshing={refreshing}
-        onRefresh={() => {
-          // Implement refresh logic here
-        }}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor="#FFFFFF" />}
       />
     </SafeAreaView>
   )
@@ -144,4 +150,3 @@ const styles = StyleSheet.create({
     color: "#AAAAAA",
   },
 })
-

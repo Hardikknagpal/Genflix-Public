@@ -1,36 +1,32 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import { Stack } from "expo-router"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { AppProvider } from "./context/AppContext"
-import { View, Text, ActivityIndicator, Button } from "react-native"
+import { View, Text, Button } from "react-native"
 import { SplashScreen } from "./components/SplashScreen"
 import { useRouter } from "expo-router"
-
+import { configureAmplify } from "./services/auth-service"
 
 export default function Layout() {
   const [error, setError] = useState<string | null>(null)
   const [retryCount, setRetryCount] = useState(0)
-    const [isReady, setIsReady] = useState(false)
-    const router = useRouter()
-  
-
-   useEffect(() => {
-      // Simulate splash screen delay
-      const timer = setTimeout(() => {
-        setIsReady(true)
-      }, 2000)
-  
-      return () => clearTimeout(timer)
-    }, [])
-
+  const [isReady, setIsReady] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
+    // Simulate splash screen delay
+    const timer = setTimeout(() => {
+      setIsReady(true)
+    }, 4000)
 
+    return () => clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
     const initializeApp = async () => {
       try {
-        // Initialize app
+        // Initialize Amplify
+        configureAmplify()
       } catch (err) {
         console.error("Error initializing app:", err)
         setError(err instanceof Error ? err.message : "Unknown error initializing app")
@@ -55,19 +51,19 @@ export default function Layout() {
         <Text style={{ color: "red", marginBottom: 10, fontSize: 18, textAlign: "center" }}>
           Error initializing app:
         </Text>
-        <Text style={{textAlign: "center", color: "white", marginBottom: 20 }}>{error}</Text>
+        <Text style={{ textAlign: "center", color: "white", marginBottom: 20 }}>{error}</Text>
         <Button title="Retry" onPress={handleRetry} color="#E50914" />
       </View>
     )
   }
 
-   if (!isReady) {
-      return (
-        <AppProvider navigateToLogin={navigateToLogin}>
-          <SplashScreen onFinish={() => setIsReady(true)} />
-        </AppProvider>
-      )
-    }
+  if (!isReady) {
+    return (
+      <AppProvider navigateToLogin={navigateToLogin}>
+        <SplashScreen onFinish={() => setIsReady(true)} />
+      </AppProvider>
+    )
+  }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -95,7 +91,7 @@ export default function Layout() {
             options={{
               presentation: "card",
               animation: "slide_from_right",
-              headerShown: false
+              headerShown: false,
             }}
           />
           <Stack.Screen
@@ -103,7 +99,7 @@ export default function Layout() {
             options={{
               presentation: "modal",
               animation: "slide_from_bottom",
-              headerShown: false
+              headerShown: false,
             }}
           />
         </Stack>
