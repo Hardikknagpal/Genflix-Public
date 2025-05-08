@@ -46,40 +46,23 @@ npm install
 yarn install
 ```
 
-3. Create a `.env` file in the root directory and add your TMDb API key:
+3. Create a `.env` file in the root directory and add your TMDb API key & AWS Cognito details along with GraphQL API:
 ```
 TMDB_API_KEY=your_api_key_here
 ```
 
 4. Start the development server:
 ```bash
-npm start
+npx expo start
 # or
-yarn start
+yarn expo start
 ```
 
 5. Run on your device or emulator:
 - Press `a` to run on Android emulator
 - Press `i` to run on iOS simulator
-- Scan the QR code with the Expo Go app on your physical device
+- Scan the QR code with the Expo Go app on your android physical device or with camera App on iOS physical device
 
-## Project Structure
-
-```
-genflix/
-├── app/
-│   ├── components/         # Reusable components
-│   ├── context/           # React Context for state management
-│   ├── screens/           # Screen components
-│   ├── services/          # API services
-│   ├── _layout.tsx        # Root layout component
-│   └── index.tsx          # Entry point
-├── assets/                # Static assets
-├── .env                   # Environment variables
-├── app.json              # Expo configuration
-├── package.json          # Dependencies
-└── README.md            # Documentation
-```
 
 ## Contributing
 
