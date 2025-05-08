@@ -6,6 +6,9 @@ A Netflix-like mobile application built with Expo and React Native, featuring a 
 
 - Browse trending and popular movies and TV shows
 - Search for movies and TV shows
+-
+- ![photo_2025-05-08_12-01-36](https://github.com/user-attachments/assets/6afad698-594e-4c62-9921-a29d5d345405)
+
 - View detailed information about movies and TV shows
 - Add movies and TV shows to favorites
 - Beautiful Netflix-inspired UI
