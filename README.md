@@ -2,7 +2,7 @@
 
 
 
-A Netflix-like mobile application built with Expo and React Native, featuring a modern UI and integration with the TMDb API.
+A Netflix-like mobile app built with Expo and React Native, featuring TMDb API integration, AWS Cognito authentication via Amplify, and GraphQL for managing user wishlists.
 
 <h2>📱 App Screenshots</h2>
 
