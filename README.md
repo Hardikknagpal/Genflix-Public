@@ -4,12 +4,15 @@
 
 A Netflix-like mobile application built with Expo and React Native, featuring a modern UI and integration with the TMDb API.
 
-![photo_2025-05-08_12-01-17](https://github.com/user-attachments/assets/42e6baf2-4698-42d7-8e09-6dff9c179882)
-![photo_2025-05-08_12-01-15](https://github.com/user-attachments/assets/3b830f4e-4025-4f30-b25d-ecd5b8bb7378)
-![photo_2025-05-08_12-01-20](https://github.com/user-attachments/assets/28f4082e-c5b3-43a8-a2bf-2eb2ecd7bbea)
-![photo_2025-05-08_12-01-21](https://github.com/user-attachments/assets/53610f13-ebc5-4415-bbed-ca86c5da374c)
-![photo_2025-05-08_12-01-24 (2)](https://github.com/user-attachments/assets/415f5eeb-18b3-4e62-a03b-fb7bfd3c3415)
-![photo_2025-05-08_12-01-25](https://github.com/user-attachments/assets/8e8e7b19-3fa4-4cf2-b9fe-2340a6081d5c)
+<h2>📱 App Screenshots</h2>
+
+<img src="https://github.com/user-attachments/assets/42e6baf2-4698-42d7-8e09-6dff9c179882" alt="Home Screen" width="300"/>
+<img src="https://github.com/user-attachments/assets/3b830f4e-4025-4f30-b25d-ecd5b8bb7378" alt="Login Screen" width="300"/>
+<img src="https://github.com/user-attachments/assets/28f4082e-c5b3-43a8-a2bf-2eb2ecd7bbea" alt="Profile Screen" width="300"/>
+<img src="https://github.com/user-attachments/assets/53610f13-ebc5-4415-bbed-ca86c5da374c" alt="Detail Screen" width="300"/>
+<img src="https://github.com/user-attachments/assets/415f5eeb-18b3-4e62-a03b-fb7bfd3c3415" alt="List Screen" width="300"/>
+<img src="https://github.com/user-attachments/assets/8e8e7b19-3fa4-4cf2-b9fe-2340a6081d5c" alt="Splash Screen" width="300"/>
+
 
 
 ## Features
