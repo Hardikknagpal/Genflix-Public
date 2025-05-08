@@ -12,6 +12,7 @@ A Netflix-like mobile application built with Expo and React Native, featuring a 
 <img src="https://github.com/user-attachments/assets/53610f13-ebc5-4415-bbed-ca86c5da374c" alt="Detail Screen" width="300"/>
 <img src="https://github.com/user-attachments/assets/415f5eeb-18b3-4e62-a03b-fb7bfd3c3415" alt="List Screen" width="300"/>
 <img src="https://github.com/user-attachments/assets/8e8e7b19-3fa4-4cf2-b9fe-2340a6081d5c" alt="Splash Screen" width="300"/>
+<img src="https://github.com/user-attachments/assets/9b6554d6-b6ba-479a-bf67-2a75dc28a5f1" alt="Splash Screen" width="300"/>
 
 
 https://github.com/user-attachments/assets/d71f767a-4c2a-4379-997c-452500a6aa70
