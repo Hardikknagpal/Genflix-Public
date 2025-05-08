@@ -156,7 +156,7 @@ export default function HomeScreen() {
 
         <View style={styles.footer}>
           <CustomText variant="caption" style={styles.footerText}>
-            © 2023 GenFlix • All Rights Reserved
+            © 2025 GenFlix • All Rights Reserved
           </CustomText>
         </View>
 

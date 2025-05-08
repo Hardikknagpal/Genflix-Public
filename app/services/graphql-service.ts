@@ -2,7 +2,7 @@ import { fetchAuthSession } from "aws-amplify/auth"
 import type { MediaItem } from "./tmdbApi"
 
 // GraphQL API URL
-const API_URL = "https://nlop9z9t2e.execute-api.eu-west-1.amazonaws.com/"
+const API_URL = "GRAPHQL_API_URL"
 
 // Make a GraphQL request with authentication
 export const makeGraphQLRequest = async (query: string, variables = {}) => {

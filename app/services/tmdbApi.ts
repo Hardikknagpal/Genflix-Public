@@ -1,5 +1,5 @@
 // TMDb API configuration
-const API_KEY = process.env.TMDB_API_KEY || "8b8639f8e2232dd901a20b590dfb5374"
+const API_KEY = process.env.TMDB_API_KEY || "TMDB_API_KEY_HERE"
 const BASE_URL = process.env.API_BASE_URL || "https://api.themoviedb.org/3"
 const IMAGE_BASE_URL = process.env.API_IMAGE_BASE_URL || "https://image.tmdb.org/t/p"
 
